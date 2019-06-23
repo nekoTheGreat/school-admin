@@ -2,4 +2,6 @@
 
 @include('navbar')
 
+@yield('content')
+
 @include('bottom')
