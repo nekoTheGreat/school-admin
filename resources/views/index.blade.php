@@ -1,5 +1,5 @@
 @include('top')
 
-Hello Main
+@include('navbar')
 
 @include('bottom')
