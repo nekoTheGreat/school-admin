@@ -1,0 +1,38 @@
+Users:
+	username
+	passs
+	name: fname, lname, middlename
+	role
+
+Roles:
+	name
+	access: dev, admin, norm
+
+Classrooms
+	name
+	teacher
+	students
+
+Students
+	user id
+	grade level
+	classrooms
+	subjects
+	teachers
+
+Teachers
+	user id
+	classrooms
+	students
+	subjects
+
+Markings
+	student
+	grade level
+	subject
+	teacher
+
+Subjects
+	name
+	category
+
