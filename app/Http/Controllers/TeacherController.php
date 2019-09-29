@@ -19,8 +19,8 @@ class TeacherController extends Controller
             ->leftJoin('users', function($join){
                 $join->on('teachers.user_id', '=', 'users.id');
             })
-            ->paginate(1, '*', 'page', 2);
-            //->get();
+            ->paginate(20, '*', 'page', $page);
+
         $records = [];
         foreach($collection as $item){
             $records[] = $item;
