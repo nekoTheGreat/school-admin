@@ -35,4 +35,21 @@ Route::group(['prefix'=> 'admin'], function(){
 
 		Route::get('', 'TeacherController@index');
 	});
+
+	Route::group(['prefix'=> 'students'], function(){
+		
+		Route::get('new-form', 'StudentController@newForm');
+
+		Route::post('new-form', 'StudentController@create');
+
+		Route::get('{teacher_id}', 'StudentController@updateForm');
+
+		Route::post('{teacher_id}', 'StudentController@update');
+
+		Route::get('{teacher_id}/confirm-delete', 'StudentController@deleteForm');
+
+		Route::post('{teacher_id}/confirm-delete', 'StudentController@delete');
+
+		Route::get('', 'StudentController@index');
+	});
 });
