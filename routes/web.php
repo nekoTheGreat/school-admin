@@ -21,6 +21,10 @@ Route::group(['prefix'=> 'admin'], function(){
 
 	Route::group(['prefix'=> 'teachers'], function(){
 		
+		Route::get('new-form', 'TeacherController@newForm');
+
+		Route::post('new-form', 'TeacherController@saveForm');
+
 		Route::get('', 'TeacherController@index');
 	});
 });
