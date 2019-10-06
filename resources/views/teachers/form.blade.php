@@ -72,7 +72,7 @@ $rank_options = [
 		<label class="uk-form-label">&nbsp;</label>
 		<div class="uk-form-controls">
 			<button class="uk-button uk-button-primary" type="submit">Save</button>
-			<button class="uk-button uk-button-default" type="reset">Cancel</button>
+			<a href="{{ action('TeacherController@index') }}" class="uk-button uk-button-default">Cancel</a>
 		</div>		
 	</div>
 </fieldset>
