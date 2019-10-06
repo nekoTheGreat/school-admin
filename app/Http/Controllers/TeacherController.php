@@ -118,4 +118,45 @@ class TeacherController extends Controller
 
 		return redirect()->action("\\".self::class."@updateForm", ['teacher_id'=>$teacher_id]);
 	}
+
+	public function deleteForm(Request $request, $teacher_id)
+	{
+		$columns = [
+			'teachers.*', 'users.firstname', 'users.lastname', 'users.middlename',
+			'users.type', 'users.email', 'users.password'
+		];
+		$item = Teacher::
+			select($columns)
+			->join('users', function($join){
+				$join->on('teachers.user_id', '=', 'users.id');
+			})->where('teachers.id', '=', $teacher_id)->first();
+		
+		$item = $item->toArray();
+		$form = new SafeObject($item);
+		$tpl = $this->getTpl('teachers/delete-form');
+		$tpl_data = [
+			'form_legend'=> 'Confirm delete teacher',
+			'form_action'=> 'delete',
+			'form'=> $form
+		];
+		return view($tpl, $tpl_data);
+	}
+
+	public function delete(Request $request, $teacher_id)
+	{
+		$teacher = Teacher::find($teacher_id);
+		if(empty($teacher)){
+			throw new \Exception("Teacher not found");
+		}
+		$teacher->forceDelete();
+
+		$user = User::find($teacher->user_id);
+		if(empty($user)){
+			throw new \Exception("User not found");
+		}
+		
+		$user->forceDelete();
+
+		return redirect()->action("\\".self::class."@index");
+	}
 }

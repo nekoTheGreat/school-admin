@@ -29,6 +29,10 @@ Route::group(['prefix'=> 'admin'], function(){
 
 		Route::post('{teacher_id}', 'TeacherController@update');
 
+		Route::get('{teacher_id}/confirm-delete', 'TeacherController@deleteForm');
+
+		Route::post('{teacher_id}/confirm-delete', 'TeacherController@delete');
+
 		Route::get('', 'TeacherController@index');
 	});
 });

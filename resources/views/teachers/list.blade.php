@@ -13,7 +13,10 @@
 			<td>{{ $item->id }}</td>
 			<td>{{ $item->firstname }} {{ $item->lastname }}</td>
 			<td>{{ $item->rank }}</td>
-			<td><a href="./teachers/{{ $item->id }}">Edit</a></td>
+			<td>
+				<a href="./teachers/{{ $item->id }}">Edit</a>&nbsp;
+				<a href="./teachers/{{ $item->id }}/confirm-delete">Delete</a>
+			</td>
 		</tr>
 		@endforeach
 	</tbody>
