@@ -23,7 +23,11 @@ Route::group(['prefix'=> 'admin'], function(){
 		
 		Route::get('new-form', 'TeacherController@newForm');
 
-		Route::post('new-form', 'TeacherController@saveForm');
+		Route::post('new-form', 'TeacherController@create');
+
+		Route::get('{teacher_id}', 'TeacherController@updateForm');
+
+		Route::post('{teacher_id}', 'TeacherController@update');
 
 		Route::get('', 'TeacherController@index');
 	});

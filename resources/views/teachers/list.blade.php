@@ -13,7 +13,7 @@
 			<td>{{ $item->id }}</td>
 			<td>{{ $item->firstname }} {{ $item->lastname }}</td>
 			<td>{{ $item->rank }}</td>
-			<td>Actions</td>
+			<td><a href="./teachers/{{ $item->id }}">Edit</a></td>
 		</tr>
 		@endforeach
 	</tbody>
