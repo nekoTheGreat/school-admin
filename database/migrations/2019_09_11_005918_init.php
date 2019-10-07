@@ -31,18 +31,18 @@ class Init extends Migration
             $table->string('name');
             $table->string('access');
             $table->dateTime('created_at');
-            $table->dateTime('modified_at');
+            $table->dateTime('updated_at')->nullable(true);
             $table->string('created_by');
-            $table->string('modified_by');
+            $table->string('updated_by')->nullable(true);
         });
 
         Schema::create('classrooms', function(Blueprint $table){
             $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->dateTime('created_at');
-            $table->dateTime('modified_at');
+            $table->dateTime('updated_at')->nullable(true);
             $table->string('created_by');
-            $table->string('modified_by');
+            $table->string('updated_by')->nullable(true);
         });
 
         Schema::create('students', function(Blueprint $table){
@@ -66,9 +66,9 @@ class Init extends Migration
             $table->string('name');
             $table->string('category');
             $table->dateTime('created_at');
-            $table->dateTime('modified_at');
+            $table->dateTime('updated_at')->nullable(true);
             $table->string('created_by');
-            $table->string('modified_by');
+            $table->string('updated_by')->nullable(true);
         });
 
         Schema::create('classroom_teachers', function(Blueprint $table){
@@ -78,9 +78,9 @@ class Init extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->dateTime('created_at');
-            $table->dateTime('modified_at');
+            $table->dateTime('updated_at')->nullable(true);
             $table->string('created_by');
-            $table->string('modified_by');
+            $table->string('updated_by')->nullable(true);
 
             $table->foreign('teacher_id')->references('id')->on('teachers');
             $table->foreign('classroom_id')->references('id')->on('classrooms');
@@ -91,9 +91,9 @@ class Init extends Migration
             $table->unsignedBigInteger('teacher_id');
             $table->unsignedBigInteger('student_id');
             $table->dateTime('created_at');
-            $table->dateTime('modified_at');
+            $table->dateTime('updated_at')->nullable(true);
             $table->string('created_by');
-            $table->string('modified_by');
+            $table->string('updated_by')->nullable(true);
 
             $table->foreign('teacher_id')->references('id')->on('teachers');
             $table->foreign('student_id')->references('id')->on('students');
@@ -105,9 +105,9 @@ class Init extends Migration
             $table->unsignedBigInteger('classroom_id');
             $table->unsignedBigInteger('student_id');
             $table->dateTime('created_at');
-            $table->dateTime('modified_at');
+            $table->dateTime('updated_at')->nullable(true);
             $table->string('created_by');
-            $table->string('modified_by');
+            $table->string('updated_by')->nullable(true);
 
             $table->foreign('teacher_id')->references('id')->on('teachers');
             $table->foreign('classroom_id')->references('id')->on('classrooms');
@@ -122,9 +122,9 @@ class Init extends Migration
             $table->decimal('mark');
             $table->enum('status', ['draft', 'final']);
             $table->dateTime('created_at');
-            $table->dateTime('modified_at');
+            $table->dateTime('updated_at')->nullable(true);
             $table->string('created_by');
-            $table->string('modified_by');
+            $table->string('updated_by')->nullable(true);
 
             $table->foreign('teacher_id')->references('id')->on('teachers');
             $table->foreign('subject_id')->references('id')->on('subjects');
