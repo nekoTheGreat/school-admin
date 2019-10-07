@@ -36,6 +36,23 @@ Route::group(['prefix'=> 'admin'], function(){
 		Route::get('', 'TeacherController@index');
 	});
 
+	Route::group(['prefix'=> 'classrooms'], function(){
+		
+		Route::get('new-form', 'ClassroomController@newForm');
+
+		Route::post('new-form', 'ClassroomController@create');
+
+		Route::get('{classroom_id}', 'ClassroomController@updateForm');
+
+		Route::post('{classroom_id}', 'ClassroomController@update');
+
+		Route::get('{classroom_id}/confirm-delete', 'ClassroomController@deleteForm');
+
+		Route::post('{classroom_id}/confirm-delete', 'ClassroomController@delete');
+
+		Route::get('', 'ClassroomController@index');
+	});
+
 	Route::group(['prefix'=> 'students'], function(){
 		
 		Route::get('new-form', 'StudentController@newForm');
