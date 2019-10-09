@@ -13,7 +13,7 @@ class EducStages extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('EducationStages', function(Blueprint $table){
+		Schema::create('education_stages', function(Blueprint $table){
 			$table->bigIncrements('id');
       $table->string('stage');
       $table->string('level');
@@ -29,6 +29,6 @@ class EducStages extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('EducationStages');
+		Schema::drop('education_stages');
 	}
 }
