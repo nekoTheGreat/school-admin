@@ -27,7 +27,7 @@ class SubjectController extends Controller
 		$tpl = $this->getTpl('subjects/index');
 		$tpl_data = [
 			'items'=> $records,
-			'page_title'=> 'List ofsubjects'
+			'page_title'=> 'List of subjects'
 		];
 
 		return view($tpl, $tpl_data);
@@ -40,7 +40,7 @@ class SubjectController extends Controller
 			'password'=> uniqid()
 		]);
 		$tpl_data = [
-			'form_legend'=> 'Create newsubject',
+			'form_legend'=> 'Create new subject',
 			'form_action'=> 'create',
 			'form'=> $form,
 			'page_title'=> 'New Subject'
@@ -55,7 +55,7 @@ class SubjectController extends Controller
 		$form = new SafeObject($item);
 		$tpl = $this->getTpl('subjects/update-form');
 		$tpl_data = [
-			'form_legend'=> 'Updatesubject',
+			'form_legend'=> 'Update subject',
 			'form_action'=> 'update',
 			'form'=> $form,
 			'page_title'=> 'Update Subject'
@@ -84,7 +84,7 @@ class SubjectController extends Controller
 		
 		$subject = Subject::find($subject_id);
 		if(empty($subject)){
-			throw new \Exception("User not asubject");
+			throw new \Exception("User not a subject");
 		}
 		$subject->name = $data['name'];
 		$subject->save();
@@ -96,16 +96,16 @@ class SubjectController extends Controller
 	{
 		$item = Subject::find($subject_id);
 		if(empty($item)){
-			throw new \Exception("User not asubject");
+			throw new \Exception("User not a subject");
 		}
 		$item = $item->toArray();
 		$form = new SafeObject($item);
 		$tpl = $this->getTpl('subjects/delete-form');
 		$tpl_data = [
-			'form_legend'=> 'Confirm deletesubject',
+			'form_legend'=> 'Confirm delete subject',
 			'form_action'=> 'delete',
 			'form'=> $form,
-			'page_title'=> 'Deletesubject'
+			'page_title'=> 'Delete subject'
 		];
 		
 		return view($tpl, $tpl_data);

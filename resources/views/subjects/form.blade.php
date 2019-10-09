@@ -9,6 +9,18 @@
 			</div>
 	</div>
 	<div>
+		<label class="uk-form-label">Category:</label>
+			<div class="uk-form-controls">
+				<input class="uk-input" type="text" name="category" required value="{{ $form->category }}">
+			</div>
+	</div>
+	<div>
+			<label class="uk-form-label">Education Stage:</label>
+			<div class="uk-form-controls">
+				<input class="uk-input" type="text" name="education_stage_id" required value="{{ $form->education_stage_id }}">
+			</div>
+	</div>
+	<div>
 		<label class="uk-form-label">&nbsp;</label>
 		<div class="uk-form-controls">
 			<button class="uk-button uk-button-primary" type="submit">Save</button>

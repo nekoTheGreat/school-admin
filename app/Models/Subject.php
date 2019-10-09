@@ -9,7 +9,7 @@ class Subject extends Model
 {
     protected $table = 'subjects';
     protected $fillable = [
-        'name', 'created_at', 'created_by', 'updated_at',
+        'name', 'category', 'education_stage_id', 'created_at', 'created_by', 'updated_at',
         'updated_by'
     ];
     public $timestamps = false;

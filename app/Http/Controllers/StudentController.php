@@ -76,15 +76,24 @@ class StudentController extends Controller
 		$data['type'] = 'student';
 		$data['created_at'] = DT::utc();
 		$data['password'] = bcrypt($data['password']);
-		
-		$user = User::create($data);
-		if(empty($user)){
-			throw new \Exception("User failed to create");
+		$data['email'] = strtolower($data['email']);
+
+		try{
+			DB::beginTransaction();
+
+			$user = User::create($data);
+			if(empty($user)){
+				throw new \Exception("User failed to create");
+			}
+			
+			$student = new Student();
+			$student->fill($data);
+			$student->user_id = $user->id;
+			$student->save();
+		}catch(\Exception $e){
+			DB::rollback();
+			throw $e;
 		}
-		$student = new Student();
-		$student->user_id = $user->id;
-		$student->grade_level = $data['grade_level'];
-		$student->save();
 
 		return redirect()->action("\\".self::class."@index");
 	}
@@ -98,7 +107,7 @@ class StudentController extends Controller
 		if(empty($student)){
 			throw new \Exception("User not a student");
 		}
-		$student->grade_level = $data['grade_level'];
+		$student->fill($data);
 		$student->save();
 
 		$user = User::find($student['user_id']);

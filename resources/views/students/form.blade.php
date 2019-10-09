@@ -29,9 +29,9 @@ $grade_level_options = [
 			</div>
 	</div>
 	<div>
-			<label class="uk-form-label">Grade Level:</label>
+			<label class="uk-form-label">Education Stage:</label>
 			<div class="uk-form-controls">
-				<select class="uk-select" name="grade_level" required>
+				<select class="uk-select" name="education_stage_id" required>
 					<option value="">Select</option>
 					@foreach($grade_level_options as $option)
 						<option value="{{ $option['value'] }}"
