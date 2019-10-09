@@ -18,22 +18,22 @@ Route::group(['prefix'=> 'programs'], function(){
 });
 
 Route::group(['prefix'=> 'admin'], function(){
-
-	Route::group(['prefix'=> 'teachers'], function(){
+	
+	Route::group(['prefix'=> 'education-stages'], function(){
 		
-		Route::get('new-form', 'TeacherController@newForm');
+		Route::get('new-form', 'EducationStageController@newForm');
 
-		Route::post('new-form', 'TeacherController@create');
+		Route::post('new-form', 'EducationStageController@create');
 
-		Route::get('{teacher_id}', 'TeacherController@updateForm');
+		Route::get('{education_stage_id}', 'EducationStageController@updateForm');
 
-		Route::post('{teacher_id}', 'TeacherController@update');
+		Route::post('{education_stage_id}', 'EducationStageController@update');
 
-		Route::get('{teacher_id}/confirm-delete', 'TeacherController@deleteForm');
+		Route::get('{education_stage_id}/confirm-delete', 'EducationStageController@deleteForm');
 
-		Route::post('{teacher_id}/confirm-delete', 'TeacherController@delete');
+		Route::post('{education_stage_id}/confirm-delete', 'EducationStageController@delete');
 
-		Route::get('', 'TeacherController@index');
+		Route::get('', 'EducationStageController@index');
 	});
 
 	Route::group(['prefix'=> 'classrooms'], function(){
@@ -59,14 +59,31 @@ Route::group(['prefix'=> 'admin'], function(){
 
 		Route::post('new-form', 'StudentController@create');
 
-		Route::get('{teacher_id}', 'StudentController@updateForm');
+		Route::get('{student_id}', 'StudentController@updateForm');
 
-		Route::post('{teacher_id}', 'StudentController@update');
+		Route::post('{student_id}', 'StudentController@update');
 
-		Route::get('{teacher_id}/confirm-delete', 'StudentController@deleteForm');
+		Route::get('{student_id}/confirm-delete', 'StudentController@deleteForm');
 
-		Route::post('{teacher_id}/confirm-delete', 'StudentController@delete');
+		Route::post('{student_id}/confirm-delete', 'StudentController@delete');
 
 		Route::get('', 'StudentController@index');
+	});
+
+	Route::group(['prefix'=> 'teachers'], function(){
+		
+		Route::get('new-form', 'TeacherController@newForm');
+
+		Route::post('new-form', 'TeacherController@create');
+
+		Route::get('{teacher_id}', 'TeacherController@updateForm');
+
+		Route::post('{teacher_id}', 'TeacherController@update');
+
+		Route::get('{teacher_id}/confirm-delete', 'TeacherController@deleteForm');
+
+		Route::post('{teacher_id}/confirm-delete', 'TeacherController@delete');
+
+		Route::get('', 'TeacherController@index');
 	});
 });

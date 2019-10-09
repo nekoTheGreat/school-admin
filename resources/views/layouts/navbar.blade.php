@@ -3,10 +3,11 @@
 		<div class="uk-navbar-left">
 					<ul class="uk-navbar-nav">
 							<li class="uk-active"><a href="/">Home</a></li>
-							<li><a href="/admin/teachers">Teachers</a></a></li>
-							<li><a href="/admin/students">Students</a></li>
-							<li><a href="/admin/classrooms">Classrooms</a></li>
-							<li><a href="/admin/subjects">Subjects</a></li>
+							<li><a href="{{ action('TeacherController@index') }}">Teachers</a></a></li>
+							<li><a href="{{ action('StudentController@index') }}">Students</a></li>
+							<li><a href="{{ action('ClassroomController@index') }}">Classrooms</a></li>
+							<li><a href="#">Subjects</a></li>
+							<li><a href="{{ action('EducationStageController@index') }}">Education Stages</a></li>
 					</ul>
 			</div>
 	</nav>
