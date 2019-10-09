@@ -70,6 +70,23 @@ Route::group(['prefix'=> 'admin'], function(){
 		Route::get('', 'StudentController@index');
 	});
 
+	Route::group(['prefix'=> 'subjects'], function(){
+		
+		Route::get('new-form', 'SubjectController@newForm');
+
+		Route::post('new-form', 'SubjectController@create');
+
+		Route::get('{subject_id}', 'SubjectController@updateForm');
+
+		Route::post('{subject_id}', 'SubjectController@update');
+
+		Route::get('{subject_id}/confirm-delete', 'SubjectController@deleteForm');
+
+		Route::post('{subject_id}/confirm-delete', 'SubjectController@delete');
+
+		Route::get('', 'SubjectController@index');
+	});
+
 	Route::group(['prefix'=> 'teachers'], function(){
 		
 		Route::get('new-form', 'TeacherController@newForm');

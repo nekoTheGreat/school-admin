@@ -6,7 +6,7 @@
 							<li><a href="{{ action('TeacherController@index') }}">Teachers</a></a></li>
 							<li><a href="{{ action('StudentController@index') }}">Students</a></li>
 							<li><a href="{{ action('ClassroomController@index') }}">Classrooms</a></li>
-							<li><a href="#">Subjects</a></li>
+							<li><a href="{{ action('SubjectController@index') }}">Subjects</a></li>
 							<li><a href="{{ action('EducationStageController@index') }}">Education Stages</a></li>
 					</ul>
 			</div>
