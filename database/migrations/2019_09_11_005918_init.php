@@ -45,12 +45,21 @@ class Init extends Migration
             $table->string('updated_by')->nullable(true);
         });
 
+        Schema::create('education_stages', function(Blueprint $table){
+			$table->bigIncrements('id');
+            $table->string('stage');
+            $table->string('level');
+            $table->string('created_at');
+            $table->string('created_by');
+		});
+
         Schema::create('students', function(Blueprint $table){
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->string('grade_level');
+            $table->unsignedBigInteger('education_stage_id');
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('education_stage_id')->references('id')->on('education_stages');
         });
 
         Schema::create('teachers', function(Blueprint $table){
@@ -65,7 +74,7 @@ class Init extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('category');
-            $table->string('grade_level')->nullable(true);
+            $table->string('education_stage_id')->nullable(true);
             $table->dateTime('created_at');
             $table->dateTime('updated_at')->nullable(true);
             $table->string('created_by');
@@ -131,14 +140,6 @@ class Init extends Migration
             $table->foreign('subject_id')->references('id')->on('subjects');
             $table->foreign('student_id')->references('id')->on('students');
         });
-
-        Schema::create('education_stages', function(Blueprint $table){
-			$table->bigIncrements('id');
-            $table->string('stage');
-            $table->string('level');
-            $table->string('created_at');
-            $table->string('created_by');
-		});
     }
 
     /**
