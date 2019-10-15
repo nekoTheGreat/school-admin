@@ -20,9 +20,7 @@
 		@include("teachers.form")
 	</form>
 @elseif($form_name == 'subjects')
-	<form class="uk-form-stacked" method="POST">
-		@include("teachers.form-subjects")
-	</form>
+	@include("teachers.form-subjects")
 @endif
 
 @endsection
