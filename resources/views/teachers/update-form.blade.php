@@ -8,10 +8,10 @@
 
 <ul class="uk-tab">
 	<li class="@if($form_name == 'index') uk-active @endif">
-			<a href="{{ action('TeacherController@updateForm', [$form->id, 'form'=> 'index']) }}">Information</a>
+			<a href="{{ action('TeacherController@updateForm', [$form->id]) }}">Information</a>
 	</li>
-	<li class="@if($form_name == 'subjects') 'uk-active' @endif">
-		<a href="{{ action('TeacherController@updateForm', [$form->id, 'form'=> 'subjects']) }}">Subjects</a>
+	<li class="@if($form_name == 'subjects') uk-active @endif">
+		<a href="{{ action('TeacherController@listSubjects', [$form->id]) }}">Subjects</a>
 	</li>
 </ul>
 

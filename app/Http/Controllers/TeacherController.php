@@ -60,21 +60,15 @@ class TeacherController extends Controller
 			})->where('teachers.id', '=', $teacher_id)->first();
 		
 		$item = $item->toArray();
-
-		$form_name = $request->get('form');
-		if(empty($form_name)){
-			$form_name = 'index';
-		}
-		
-		$form = new SafeObject($item);
-		$tpl = $this->getTpl('teachers/update-form');
 		$tpl_data = [
-			'form_legend'=> 'Update teacher',
+			'form'=> new SafeObject($item),
+			'form_name'=> 'index',
+			'form_legend'=> 'Update Teacher',
 			'form_action'=> 'update',
-			'form'=> $form,
-			'page_title'=> 'Update Teacher',
-			'form_name'=> $form_name
+			'page_title'=> 'Update Teacher'
 		];
+
+		$tpl = $this->getTpl('teachers/update-form');
 		
 		return view($tpl, $tpl_data);
 	}
@@ -167,5 +161,30 @@ class TeacherController extends Controller
 		$user->forceDelete();
 
 		return redirect()->action("\\".self::class."@index");
+	}
+
+	public function listSubjects(Request $request, $teacher_id)
+	{
+		$columns = [
+			'teachers.*', 'users.firstname', 'users.lastname', 'users.middlename',
+			'users.type', 'users.email', 'users.password'
+		];
+		$item = Teacher::
+			select($columns)
+			->join('users', function($join){
+				$join->on('teachers.user_id', '=', 'users.id');
+			})->where('teachers.id', '=', $teacher_id)->first();
+		
+		$item = $item->toArray();
+		$tpl_data = [
+			'form'=> new SafeObject($item),
+			'subjects'=> [],
+			'form_name'=> 'subjects',
+			'page_title'=> 'List of subjects'
+		];
+
+		$tpl = $this->getTpl('teachers/update-form');
+		
+		return view($tpl, $tpl_data);
 	}
 }

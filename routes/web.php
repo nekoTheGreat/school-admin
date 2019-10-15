@@ -93,13 +93,21 @@ Route::group(['prefix'=> 'admin'], function(){
 
 		Route::post('new-form', 'TeacherController@create');
 
-		Route::get('{teacher_id}', 'TeacherController@updateForm');
+		Route::group(['prefix'=>'{teacher_id}'], function(){
+			
+			Route::get('', 'TeacherController@updateForm');
 
-		Route::post('{teacher_id}', 'TeacherController@update');
+			Route::post('', 'TeacherController@update');
 
-		Route::get('{teacher_id}/confirm-delete', 'TeacherController@deleteForm');
+			Route::get('/confirm-delete', 'TeacherController@deleteForm');
 
-		Route::post('{teacher_id}/confirm-delete', 'TeacherController@delete');
+			Route::post('/confirm-delete', 'TeacherController@delete');
+
+			Route::group(['prefix'=> 'subjects'], function(){
+				
+				Route::get('', 'TeacherController@listSubjects');
+			});
+		});
 
 		Route::get('', 'TeacherController@index');
 	});
