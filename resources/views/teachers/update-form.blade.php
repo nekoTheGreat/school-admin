@@ -1,13 +1,28 @@
 @extends("layouts.main")
 
 @section("title")
-New Teacher Form
+{{ $page_title }}
 @endsection
 
 @section("content")
 
-<form class="uk-form-stacked" method="POST">
-	@include("teachers.form")
-</form>
+<ul class="uk-tab">
+	<li class="@if($form_name == 'index') uk-active @endif">
+			<a href="{{ action('TeacherController@updateForm', [$form->id, 'form'=> 'index']) }}">Information</a>
+	</li>
+	<li class="@if($form_name == 'subjects') 'uk-active' @endif">
+		<a href="{{ action('TeacherController@updateForm', [$form->id, 'form'=> 'subjects']) }}">Subjects</a>
+	</li>
+</ul>
+
+@if($form_name == 'index')
+	<form class="uk-form-stacked" method="POST">
+		@include("teachers.form")
+	</form>
+@elseif($form_name == 'subjects')
+	<form class="uk-form-stacked" method="POST">
+		@include("teachers.form-subjects")
+	</form>
+@endif
 
 @endsection

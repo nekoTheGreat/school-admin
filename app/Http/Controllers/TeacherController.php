@@ -60,13 +60,22 @@ class TeacherController extends Controller
 			})->where('teachers.id', '=', $teacher_id)->first();
 		
 		$item = $item->toArray();
+
+		$form_name = $request->get('form');
+		if(empty($form_name)){
+			$form_name = 'index';
+		}
+		
 		$form = new SafeObject($item);
 		$tpl = $this->getTpl('teachers/update-form');
 		$tpl_data = [
 			'form_legend'=> 'Update teacher',
 			'form_action'=> 'update',
-			'form'=> $form
+			'form'=> $form,
+			'page_title'=> 'Update Teacher',
+			'form_name'=> $form_name
 		];
+		
 		return view($tpl, $tpl_data);
 	}
 
