@@ -180,7 +180,33 @@ class TeacherController extends Controller
 			'form'=> new SafeObject($item),
 			'subjects'=> [],
 			'form_name'=> 'subjects',
+			'form_sub_name'=> 'index',
 			'page_title'=> 'List of subjects'
+		];
+
+		$tpl = $this->getTpl('teachers/update-form');
+		
+		return view($tpl, $tpl_data);
+	}
+
+	public function attachSubjectsForm(Request $request, $teacher_id)
+	{
+		$columns = [
+			'teachers.*', 'users.firstname', 'users.lastname', 'users.middlename',
+			'users.type', 'users.email', 'users.password'
+		];
+		$item = Teacher::
+			select($columns)
+			->join('users', function($join){
+				$join->on('teachers.user_id', '=', 'users.id');
+			})->where('teachers.id', '=', $teacher_id)->first();
+		
+		$item = $item->toArray();
+		$tpl_data = [
+			'form'=> new SafeObject($item),
+			'form_name'=> 'subjects',
+			'form_sub_name'=> 'create',
+			'page_title'=> 'New Subject for Teacher'
 		];
 
 		$tpl = $this->getTpl('teachers/update-form');

@@ -106,6 +106,8 @@ Route::group(['prefix'=> 'admin'], function(){
 			Route::group(['prefix'=> 'subjects'], function(){
 				
 				Route::get('', 'TeacherController@listSubjects');
+
+				Route::get('/attach', 'TeacherController@attachSubjectsForm');
 			});
 		});
 
