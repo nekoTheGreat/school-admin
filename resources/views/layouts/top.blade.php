@@ -10,5 +10,7 @@
         <script src="/libs/vue/vue.min.js"></script>
         <script src="/libs/uikit-3.2.0/js/uikit.min.js"></script>
         <script src="/libs/uikit-3.2.0/js/uikit-icons.min.js"></script>
+
+        @yield('append_head')
     </head>
 	<body>
