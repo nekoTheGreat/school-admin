@@ -5,7 +5,7 @@
 
 <div id="teacher_subjects">
 	<div class="uk-container uk-float-right">
-		<button class="uk-button uk-button-primary" type="button">Save</button>
+		<button class="uk-button uk-button-primary" type="button" v-on:click="save()">Save</button>
 		<button class="uk-button uk-button-default" type="button" v-on:click="reset()">Reset</button>
 	</div>
 	<div class="uk-clearfix"></div>
@@ -27,7 +27,7 @@
 		<table class="uk-table">
 			<tbody>
 				<template v-for="item in items">
-					<tr>
+					<tr v-if="item.deleted != true">
 						<td>@{{ item.name }}</td>
 						<td>@{{ item.category }}</td>
 						<td><a href="/#" v-on:click="removeItem($event, item.id)"><span uk-icon="trash"></span></a></td>
@@ -104,10 +104,15 @@
 			addItem: function(item){
 				if(item){
 					var found = this.items.findIndex(it=>{
-						return it.id == item.id;
+						return it.subject_id == item.id;
 					});
 					if(found == -1){
+						var clone = Object.assign(item);
+						clone.subject_id = clone.id;
+						delete clone.id;
 						this.items.unshift(item);
+					}else{
+						delete this.items[found].deleted;
 					}
 				}
 				this.subject = "";
@@ -118,7 +123,12 @@
 					return item.id == id;
 				});
 				if(index > -1){
-					this.items.splice(index, 1);
+					var item = this.items[index];
+					if(item.id){
+						this.$set(this.items[index], 'deleted', true);
+					}else{
+						this.items.splice(index, 1);
+					}
 				}
 			},
 			getSubjects: async function(){
@@ -129,6 +139,29 @@
 			},
 			reset: function(){
 				this.getSubjects();
+			},
+			save: async function(){
+				var form = {subjects: []};
+				this.items.forEach(item=>{
+					if(item.id){
+						if(item.deleted){
+							form.subjects.push({id: item.id, deleted: item.deleted});
+						}
+					}else{
+						form.subjects.push({subject_id: item.subject_id});
+					}
+				});
+				var url = '/api/subjects/teachers/'+config.id;
+				var opts = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: $.param(form)
+				};
+				const resp = await fetch(url, opts);
+				const data = await resp.json();
+				console.log(data);
 			}
 		}
 	});
