@@ -37,4 +37,37 @@ class SubjectController extends Controller
 
 		return response()->json($tpl_data);
 	}
+
+	public function getTeacher(Request $request, $teacher_id)
+	{
+		$page = $request->get('page');
+		if(empty($page)){
+			$page = 1;
+		}
+		$per_page = 20;
+
+		$columns = [
+			'subjects.*'
+		];
+		$collection = Subject::
+			select($columns)
+			->join('teacher_subjects', function($join){
+				$join->on('teacher_subjects.subject_id', '=', 'subjects.id');
+			})
+			->where('teacher_subjects.teacher_id', '=', $teacher_id)
+			->paginate($per_page, '*', 'page', $page);
+		
+		$items = [];
+		foreach($collection as $item){
+			$items[] = $item;
+		}
+
+		$tpl = $this->getTpl('subjects/index');
+		$tpl_data = [
+			'items'=> $items,
+			'page'=> $page
+		];
+
+		return response()->json($tpl_data);
+	}
 }

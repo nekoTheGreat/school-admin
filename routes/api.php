@@ -19,5 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix'=> 'subjects'], function(){
 
+    Route::group(['prefix'=> 'teachers/{teacher_id}'], function(){
+
+        Route::get('', 'API\SubjectController@getTeacher');
+    });
+
     Route::get('', 'API\SubjectController@search');
 });

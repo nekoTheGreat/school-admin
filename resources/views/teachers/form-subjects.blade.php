@@ -1,76 +1,41 @@
-@if($form_sub_name == 'index')
+@section('append_head')
+	<link href="/libs/auto-complete/auto-complete.css" rel="stylesheet">
+	<script src="/libs/auto-complete/auto-complete.min.js"></script>
+@endsection
 
-<div class="uk-container">
-	<a href="{{ action('TeacherController@attachSubjectsForm', ['teacher_id'=> $form->id]) }}" class="uk-button uk-button-primary" title="Add item">
-		<span uk-icon="icon: plus;"></span>
-	</a>
-	<a href="" class="uk-button uk-button-default" title="refresh list">
-		<span uk-icon="icon:refresh"></span>
-	</a>
-</div>
-
-
-<table class="uk-table">
-	<tr>
-		<thead>
-			<th>ID</th>
-			<th>Subject</th>
-			<th>Actions</th>
-		</thead>
-		<tbody>
-			@if(count($subjects) == 0)
-				<tr>
-					<td colspan="3" style="text-align:center">No record found</td>
-				</tr>
-			@endif
-			@foreach($subjects as $subject)
-				<tr>
-					<td>{{ $subject->id }}</td>
-					<td>{{ $subject->name }}</td>
-					<td>Action</td>
-				</tr>
-			@endforeach
-		</tbody>
-	</tr>
-</table>
-
-@elseif($form_sub_name == 'create')
-<div id="form_list">
+<div id="teacher_subjects">
+	<div class="uk-container uk-float-right">
+		<button class="uk-button uk-button-primary" type="button">Save</button>
+		<button class="uk-button uk-button-default" type="button" v-on:click="reset()">Reset</button>
+	</div>
+	<div class="uk-clearfix"></div>
 
 	<form class="uk-form-stacked" action="POST">
 		<input type="hidden" name="teacher_id" value="{{ $form->id }}">
 		<input type="hidden" name="subjects" :value="subjectsField">
 		<fieldset class="uk-fieldset">
-			<legend class="uk-legend">{{ $page_title }}</legend>
 			<div class="uk-margin"></div>
 			<div>
 					<label class="uk-form-label">Find Subject:</label>
 					<div class="uk-form-controls">
-						<input class="uk-input" type="text" v-model="subject" v-on:keyup.enter="addItem()">
+						<input class="subject_options uk-input" v-model="subject" v-on:keyup.enter="addItem()">
 					</div>
-			</div>
-			<div>
-				<table class="uk-table">
-					<tbody>
-						<template v-for="item in items">
-							<tr>
-								<td>@{{ item.name }}</td>
-								<td><a href="/#" v-on:click="removeItem($event, item.id)"><span uk-icon="trash"></span></a></td>
-							</tr>
-						</template>
-					</tbody>
-				</table>
-			</div>
-			<div>
-				<label class="uk-form-label">&nbsp;</label>
-				<div class="uk-form-controls">
-					<button class="uk-button uk-button-primary" type="submit">Save</button>
-					<a href="{{ action('TeacherController@listSubjects', [$form->id]) }}" class="uk-button uk-button-default">Cancel</a>
-				</div>		
 			</div>
 		</fieldset>
 	</form>
-
+	<div>
+		<table class="uk-table">
+			<tbody>
+				<template v-for="item in items">
+					<tr>
+						<td>@{{ item.name }}</td>
+						<td>@{{ item.category }}</td>
+						<td><a href="/#" v-on:click="removeItem($event, item.id)"><span uk-icon="trash"></span></a></td>
+					</tr>
+				</template>
+			</tbody>
+		</table>
+	</div>
 </div>
 <script>
 	// prevent form submit after text field on enter
@@ -80,8 +45,10 @@
 			return false;
 		}
 	});
+	window.config = <?=json_encode($form); ?>;
+
 	new Vue({
-		el: '#form_list',
+		el: '#teacher_subjects',
 		data: function(){
 			return {
 				subject: "",
@@ -90,16 +57,59 @@
 		},
 		computed: {
 			subjectsField: function(){
-				return JSON.stringify(this.items);
+				var ids = [];
+				this.items.forEach(item=>{
+					ids.push(item.id);
+				});
+				return JSON.stringify(ids);
 			}
 		},
+		mounted: function(){
+			var input = $(this.$el).find(".subject_options")[0];
+			var self = this;
+			this.autocomplete = new autoComplete({
+				selector: input,
+				minChars: 2,
+				source: function(term, suggest){
+					var ac = this;
+					term = term.toLowerCase();
+					this.items = [];
+					try{ this.xhr.abort() }catch(e){}
+					this.xhr = $.getJSON('/api/subjects', {q: self.subject}, function(data){
+						ac.items = data.items.filter(item=>{
+							return true;
+						});
+						suggest(data.items);
+					});
+				},
+				renderItem: function(item, search){
+					return '<div class="autocomplete-suggestion" data-val="'+item.id+'">'+item.name+'</div>';
+    		},
+				onSelect: function(evt, term, item){
+					var id = item.getAttribute('data-val');
+					var found = this.items.findIndex(it=>{
+						return it.id == id;
+					});
+					if(found > -1){
+						self.addItem(this.items[found]);
+					}else{
+						self.addItem(false);
+					}
+				}
+			});
+
+			this.getSubjects();
+		},
 		methods: {
-			addItem: function(){
-				var item = {
-					name: 'Subject '+this.subject,
-					id: Math.floor(Math.random() * 100000)
-				};
-				this.items.push(item);
+			addItem: function(item){
+				if(item){
+					var found = this.items.findIndex(it=>{
+						return it.id == item.id;
+					});
+					if(found == -1){
+						this.items.unshift(item);
+					}
+				}
 				this.subject = "";
 			},
 			removeItem: function(evt, id){
@@ -110,9 +120,16 @@
 				if(index > -1){
 					this.items.splice(index, 1);
 				}
+			},
+			getSubjects: async function(){
+				var url = '/api/subjects/teachers/'+config.id;
+				const resp = await fetch(url);
+				const data = await resp.json();
+				this.items = data.items;
+			},
+			reset: function(){
+				this.getSubjects();
 			}
 		}
 	});
 </script>
-
-@endif
