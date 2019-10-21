@@ -47,14 +47,14 @@ class SubjectController extends Controller
 		$per_page = 20;
 
 		$columns = [
-			'subjects.*'
+			'ts.id', 'subjects.id as subject_id', 'subjects.name', 'subjects.category'
 		];
 		$collection = Subject::
 			select($columns)
-			->join('teacher_subjects', function($join){
-				$join->on('teacher_subjects.subject_id', '=', 'subjects.id');
+			->join('teacher_subjects as ts', function($join){
+				$join->on('ts.subject_id', '=', 'subjects.id');
 			})
-			->where('teacher_subjects.teacher_id', '=', $teacher_id)
+			->where('ts.teacher_id', '=', $teacher_id)
 			->paginate($per_page, '*', 'page', $page);
 		
 		$items = [];
