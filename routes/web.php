@@ -13,10 +13,6 @@
 
 Route::get('/', 'HomeController@index');
 
-Route::group(['prefix'=> 'programs'], function(){
-	Route::get('', 'ProgramController@index');
-});
-
 Route::group(['prefix'=> 'admin'], function(){
 	
 	Route::group(['prefix'=> 'education-stages'], function(){
