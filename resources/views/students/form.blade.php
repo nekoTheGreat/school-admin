@@ -1,5 +1,5 @@
 @php
-$grade_level_options = [
+$education = [
 	['value'=> 'g1', 'label'=> 'Grade 1'],
 	['value'=> 'g2', 'label'=> 'Grade 2'],
 	['value'=> 'g3', 'label'=> 'Grade 3'],
@@ -33,9 +33,9 @@ $grade_level_options = [
 			<div class="uk-form-controls">
 				<select class="uk-select" name="education_stage_id" required>
 					<option value="">Select</option>
-					@foreach($grade_level_options as $option)
+					@foreach($education_stages as $option)
 						<option value="{{ $option['value'] }}"
-							@if($option['value'] == $form->grade_level)
+							@if($option['value'] == $form->education_stage_id)
 								selected="selected"
 							@endif
 						>{{ $option['label'] }}</option>

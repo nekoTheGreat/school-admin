@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\User;
 use App\SafeObject;
 use App\DT;
+use App\Models\EducationStage;
 
 class StudentController extends Controller
 {
@@ -42,7 +43,8 @@ class StudentController extends Controller
 		$tpl_data = [
 			'form_legend'=> 'Create new student',
 			'form_action'=> 'create',
-			'form'=> $form
+			'form'=> $form,
+			'education_stages'=> $this->getEducationStages()
 		];
 		return view($tpl, $tpl_data);
 	}
@@ -65,7 +67,8 @@ class StudentController extends Controller
 		$tpl_data = [
 			'form_legend'=> 'Update student',
 			'form_action'=> 'update',
-			'form'=> $form
+			'form'=> $form,
+			'education_stages'=> $this->getEducationStages()
 		];
 		return view($tpl, $tpl_data);
 	}
@@ -90,6 +93,8 @@ class StudentController extends Controller
 			$student->fill($data);
 			$student->user_id = $user->id;
 			$student->save();
+
+			DB::commit();
 		}catch(\Exception $e){
 			DB::rollback();
 			throw $e;
@@ -167,5 +172,18 @@ class StudentController extends Controller
 		$user->forceDelete();
 
 		return redirect()->action("\\".self::class."@index");
+	}
+
+	public function getEducationStages()
+	{
+		$records = EducationStage::select(['id', 'stage', 'level'])->get();
+		$options = [];
+		foreach($records as $record){
+			$value = $record['id'];
+			$label = $record['stage']." $record[level]";
+			$label = ucfirst($label);
+			$options[] = ['value'=> $value, 'label'=>$label];
+		}
+		return $options;
 	}
 }
