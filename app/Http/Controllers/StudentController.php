@@ -23,9 +23,19 @@ class StudentController extends Controller
 				$join->on('students.user_id', '=', 'users.id');
 			})
 			->paginate(20, '*', 'page', $page);
+		
+		$educ_stages = [];
+		foreach($this->getEducationStages() as $opt){
+			$educ_stages[$opt['value']] = $opt;
+		}
 
 		$records = [];
 		foreach($collection as $item){
+			$educ_id = $item['education_stage_id'];
+			if(isset($educ_stages[$educ_id])){
+				$label = $educ_stages[$educ_id]['label'];
+				$item['education'] = $label;
+			}
 			$records[] = $item;
 		}
 
