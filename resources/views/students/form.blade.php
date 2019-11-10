@@ -44,6 +44,21 @@ $education = [
 			</div>
 	</div>
 	<div>
+		<label class="uk-form-label">Classroom:</label>
+		<div class="uk-form-controls">
+			<select class="uk-select" name="classroom_id">
+				<option value="0">Select</option>
+				@foreach($classrooms as $option)
+					<option value="{{ $option['value'] }}"
+						@if($option['value'] == $form->classroom_id)
+							selected="selected"
+						@endif
+					>{{ $option['label'] }}</option>
+				@endforeach
+			</select>
+		</div>
+</div>
+	<div>
 			<label class="uk-form-label">Email Address:</label>
 			<div class="uk-form-controls">
 				<input class="uk-input" type="email" name="email" required value="{{ $form->email }}">

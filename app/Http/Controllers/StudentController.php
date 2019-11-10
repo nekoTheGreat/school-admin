@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\User;
 use App\SafeObject;
 use App\DT;
+use App\Models\Classroom;
 use App\Models\EducationStage;
 
 class StudentController extends Controller
@@ -28,6 +29,10 @@ class StudentController extends Controller
 		foreach($this->getEducationStages() as $opt){
 			$educ_stages[$opt['value']] = $opt;
 		}
+		$classrooms = [];
+		foreach($this->getClassrooms() as $opt){
+			$classrooms[$opt['value']] = $opt;
+		}
 
 		$records = [];
 		foreach($collection as $item){
@@ -35,6 +40,10 @@ class StudentController extends Controller
 			if(isset($educ_stages[$educ_id])){
 				$label = $educ_stages[$educ_id]['label'];
 				$item['education'] = $label;
+			}
+			$classroom_id = $item['classroom_id'];
+			if(isset($classrooms[$classroom_id])){
+				$item['classroom'] = $classrooms[$classroom_id]['label'];
 			}
 			$records[] = $item;
 		}
@@ -54,7 +63,8 @@ class StudentController extends Controller
 			'form_legend'=> 'Create new student',
 			'form_action'=> 'create',
 			'form'=> $form,
-			'education_stages'=> $this->getEducationStages()
+			'education_stages'=> $this->getEducationStages(),
+			'classrooms'=> $this->getClassrooms()
 		];
 		return view($tpl, $tpl_data);
 	}
@@ -80,6 +90,7 @@ class StudentController extends Controller
 			'form_action'=> 'update',
 			'form'=> $form,
 			'education_stages'=> $this->getEducationStages(),
+			'classrooms'=> $this->getClassrooms(),
 			'form_name'=> 'index'
 		];
 		return view($tpl, $tpl_data);
@@ -222,5 +233,16 @@ class StudentController extends Controller
 		$tpl = $this->getTpl('students/update-form');
 		
 		return view($tpl, $tpl_data);
+	}
+
+	public function getClassrooms()
+	{
+		$columns = ['id', 'name'];
+		$items = Classroom::select($columns)->get();
+		$options = [];
+		foreach($items as $item){
+			$options[] = ['value'=>$item['id'], 'label'=> $item['name']];
+		}
+		return $options;
 	}
 }

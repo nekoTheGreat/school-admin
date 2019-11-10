@@ -4,6 +4,7 @@
 			<th>ID</th>
 			<th>Name</th>
 			<th>Education Stage</th>
+			<th>Classroom</th>
 			<th>Actions</th>
 		</tr>
 	</thead>
@@ -13,6 +14,7 @@
 			<td>{{ $item->id }}</td>
 			<td>{{ $item->firstname }} {{ $item->lastname }}</td>
 			<td>{{ $item->education }}</td>
+			<td>{{ $item->classroom }}</td>
 			<td>
 				<a href="{{ action('StudentController@updateForm', ['student_id'=>$item->id]) }}">Edit</a>&nbsp;
 				<a href="{{ action('StudentController@deleteForm', ['student_id'=>$item->id]) }}">Delete</a>
