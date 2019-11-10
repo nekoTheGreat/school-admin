@@ -55,13 +55,17 @@ Route::group(['prefix'=> 'admin'], function(){
 
 		Route::post('new-form', 'StudentController@create');
 
-		Route::get('{student_id}', 'StudentController@updateForm');
+		Route::group(['prefix'=>'{student_id}'], function(){
+			Route::get('confirm-delete', 'StudentController@deleteForm');
 
-		Route::post('{student_id}', 'StudentController@update');
+			Route::post('confirm-delete', 'StudentController@delete');
 
-		Route::get('{student_id}/confirm-delete', 'StudentController@deleteForm');
+			Route::get('subjects', 'StudentController@listSubjects');
 
-		Route::post('{student_id}/confirm-delete', 'StudentController@delete');
+			Route::get('', 'StudentController@updateForm');
+
+			Route::post('', 'StudentController@update');
+		});
 
 		Route::get('', 'StudentController@index');
 	});

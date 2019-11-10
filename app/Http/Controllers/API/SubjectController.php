@@ -7,9 +7,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Subject;
-use App\SafeObject;
-use App\DT;
 use App\Models\TeacherSubject;
+use App\Models\StudentSubject;
 
 class SubjectController extends Controller
 {
@@ -86,6 +85,62 @@ class SubjectController extends Controller
 				}else if(isset($subject['subject_id'])){
 					$ts = new TeacherSubject();
 					$ts->teacher_id = $teacher_id;
+					$ts->subject_id = $subject['subject_id'];
+					$ts->save();
+				}
+			}
+		}
+
+		return response()->json();
+	}
+	
+	public function getStudent(Request $request, $student_id)
+	{
+		$page = $request->get('page');
+		if(empty($page)){
+			$page = 1;
+		}
+		$per_page = 20;
+
+		$columns = [
+			'ts.id', 'subjects.id as subject_id', 'subjects.name', 'subjects.category',
+			'subjects.education_stage_id'
+		];
+		$collection = Subject::
+			select($columns)
+			->join('student_subjects as ts', function($join){
+				$join->on('ts.subject_id', '=', 'subjects.id');
+			})
+			->where('ts.student_id', '=', $student_id)
+			->paginate($per_page, '*', 'page', $page);
+		
+		$items = [];
+		foreach($collection as $item){
+			$items[] = $item;
+		}
+
+		$tpl = $this->getTpl('subjects/index');
+		$tpl_data = [
+			'items'=> $items,
+			'page'=> $page
+		];
+
+		return response()->json($tpl_data);
+	}
+
+	public function saveStudent(Request $request, $student_id)
+	{
+		$subjects = $request->input('subjects');
+		if(is_array($subjects)){
+			foreach($subjects as $subject){
+				if(isset($subject['deleted'])){
+					$ts = StudentSubject::find($subject['id']);
+					if($ts){
+						$ts->destroy($subject['id']);
+					}
+				}else if(isset($subject['subject_id'])){
+					$ts = new StudentSubject();
+					$ts->student_id = $student_id;
 					$ts->subject_id = $subject['subject_id'];
 					$ts->save();
 				}

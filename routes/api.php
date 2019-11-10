@@ -27,5 +27,12 @@ Route::group(['prefix'=> 'subjects'], function(){
         Route::post('', 'API\SubjectController@saveTeacher');
     });
 
+    Route::group(['prefix'=> 'students/{student_id}'], function(){
+
+        Route::get('', 'API\SubjectController@getStudent');
+
+        Route::post('', 'API\SubjectController@saveStudent');
+    });
+
     Route::get('', 'API\SubjectController@search');
 });

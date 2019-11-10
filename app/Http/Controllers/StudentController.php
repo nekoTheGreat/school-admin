@@ -75,10 +75,12 @@ class StudentController extends Controller
 		$form = new SafeObject($item);
 		$tpl = $this->getTpl('students/update-form');
 		$tpl_data = [
+			'page_title'=> 'Update Student',
 			'form_legend'=> 'Update student',
 			'form_action'=> 'update',
 			'form'=> $form,
-			'education_stages'=> $this->getEducationStages()
+			'education_stages'=> $this->getEducationStages(),
+			'form_name'=> 'index'
 		];
 		return view($tpl, $tpl_data);
 	}
@@ -195,5 +197,30 @@ class StudentController extends Controller
 			$options[] = ['value'=> $value, 'label'=>$label];
 		}
 		return $options;
+	}
+
+	public function listSubjects(Request $request, $student_id)
+	{
+		$columns = [
+			'students.*', 'users.firstname', 'users.lastname', 'users.middlename',
+			'users.type', 'users.email', 'users.password'
+		];
+		$item = Student::
+			select($columns)
+			->join('users', function($join){
+				$join->on('students.user_id', '=', 'users.id');
+			})->where('students.id', '=', $student_id)->first();
+		
+		$item = $item->toArray();
+		$tpl_data = [
+			'form'=> new SafeObject($item),
+			'form_name'=> 'subjects',
+			'form_sub_name'=> 'index',
+			'page_title'=> 'List of subjects'
+		];
+
+		$tpl = $this->getTpl('students/update-form');
+		
+		return view($tpl, $tpl_data);
 	}
 }
